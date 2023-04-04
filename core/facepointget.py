@@ -44,9 +44,11 @@ def face_detect(image):
         scaleFactor=1.1,
         minNeighbors=5,)
 
-    for (x, y, w, h) in faces:
-        face_frame = [int(x),int(y),int(w),int(h)]
-        break
-
+    if len(faces) > 0:
+        for (x, y, w, h) in faces:
+            face_frame = [int(x),int(y),int(w),int(h)]
+            break
+    else:
+        face_frame = ()
     return face_frame
 #
