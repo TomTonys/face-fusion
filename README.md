@@ -21,6 +21,12 @@
 ```
 pip install -r requirements.txt
 ```
+- 安装dlib
+```
+pip install cmake boost
+安装vs 的桌面开发
+pip install dlib
+```
 - 运行 ModuleTest.py 的主函数
 ```
 python ModuleTest.py
