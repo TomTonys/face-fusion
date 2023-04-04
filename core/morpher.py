@@ -198,11 +198,33 @@ def face_merge(dst_img, src_img, out_img,
     dst_img = merge_img(src_img, dst_img, dst_matrix, dst_points, k_size, mat_multiple)
 
     os.remove(trans_file)
-    os.remove(trans_file + '.txt')
+    # os.remove(trans_file + '.txt')
 
     os.remove(morph_file)
-    os.remove(morph_file + '.txt')
+    # os.remove(morph_file + '.txt')
 
     cv2.imwrite(out_img, dst_img)
 
     return err
+
+def zoom_pic(mode_img_paht,dst_mode_path):
+    img_mode = cv2.imread(mode_img_paht, 1)
+    mode_h, mode_w = img_mode.shape[:2]
+    img_dst = cv2.imread(dst_mode_path, 1)
+    dst_h, dst_w = img_dst.shape[:2]
+    if dst_h > mode_h and dst_w <= mode_w:
+        k = mode_h / dst_h
+    if dst_w > mode_w and dst_h <= mode_h:
+        k = mode_w / dst_w
+    if dst_w > mode_w and dst_h > mode_h:
+        if dst_w - mode_w >= dst_h - mode_h:
+            k = mode_w / dst_w
+        else:
+            k = mode_h / dst_h
+    if dst_w <= mode_w and dst_h <= mode_h:
+        k = 1
+    img_dst = cv2.resize(img_dst,(int(dst_w * k), int(dst_h*k)))
+    cv2.imwrite(dst_mode_path,img_dst)
+
+
+

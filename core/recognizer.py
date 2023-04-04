@@ -2,13 +2,12 @@
 # @Time    : 2017/9/2 13:40
 # @Author  : 郑梓斌
 
-import json
-import os
 
 import requests
 import numpy as np
+from core.facepointget import get_point_2_dlib
 
-FACE_POINTS = list(range(0, 83))
+FACE_POINTS = list(range(0, 81))
 JAW_POINTS = list(range(0, 19))
 LEFT_EYE_POINTS = list(range(19, 29))
 LEFT_BROW_POINTS = list(range(29, 37))
@@ -32,35 +31,44 @@ OVERLAY_POINTS = [
 
 
 def face_points(image):
-    points = []
-    txt = image + '.txt'
+    # points = []
+    # txt = image + '.txt'
+    #
+    # if os.path.isfile(txt):
+    #     with open(txt) as file:
+    #         for line in file:
+    #             points = line
+    # elif os.path.isfile(image):
+    #     points = landmarks_by_face__(image)  # 通过接口获取人脸关键点
+    #     with open(txt, 'w') as file:
+    #         file.write(str(points))
+    #
+    # faces = json.loads(points)['faces']
+    #
+    # if len(faces) == 0:
+    #     err = 404
+    # else:
+    #     err = 0
 
-    if os.path.isfile(txt):
-        with open(txt) as file:
-            for line in file:
-                points = line
-    elif os.path.isfile(image):
-        points = landmarks_by_face__(image)
-        with open(txt, 'w') as file:
-            file.write(str(points))
+    # matrix_list = np.matrix(matrix_marks(faces[0]['landmark']))  # 读取人脸
+    img_point = get_point_2_dlib(image)
+    matrix_list = np.matrix(img_point)  # 读取人脸
 
-    faces = json.loads(points)['faces']
-
-    if len(faces) == 0:
+    if len(img_point) == 0:
         err = 404
     else:
         err = 0
-
-    matrix_list = np.matrix(matrix_marks(faces[0]['landmark']))
 
     point_list = []
     for p in matrix_list.tolist():
         point_list.append((int(p[0]), int(p[1])))
 
+    # print(matrix_list, point_list, err)
     return matrix_list, point_list, err
 
 
 def landmarks_by_face__(image):
+    """通过接口请求获取人脸关键点信息"""
     url = 'https://api-cn.faceplusplus.com/facepp/v3/detect'
     params = {
         'api_key': 'UVqp3_Es7_Gr504eGd0HQR4EWtvNC7u5',
@@ -88,7 +96,6 @@ def matrix_rectangle(left, top, width, height):
         (left + width / 2, top + height - 1),
         (left + width - 1, top + height - 1)
     ]
-
     return pointer
 
 
