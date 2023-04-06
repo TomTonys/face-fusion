@@ -26,7 +26,7 @@ def get_point_2_dlib(png_path):
         return []
     else:
         # print("Number of faces detected : {}".format(len(dets)))
-        for k,d in enumerate(dets):
+        for k, d in enumerate(dets):
             lanmarks = [[p.x,p.y] for p in predicator(img1,d).parts()]
             break
         return lanmarks

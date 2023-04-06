@@ -68,11 +68,9 @@ def correct_color(img1, img2, landmark):
 
 def tran_src(src_img, src_points, dst_points, face_area=None):
     jaw = core.JAW_END
-
     dst_list = dst_points \
                + core.matrix_rectangle(face_area[0], face_area[1], face_area[2], face_area[3]) \
                + core.matrix_rectangle(0, 0, src_img.shape[1], src_img.shape[0])
-
     src_list = src_points \
                + core.matrix_rectangle(face_area[0], face_area[1], face_area[2], face_area[3]) \
                + core.matrix_rectangle(0, 0, src_img.shape[1], src_img.shape[0])
@@ -85,12 +83,10 @@ def tran_src(src_img, src_points, dst_points, face_area=None):
 
     warp_jaw = cv2.convexHull(np.array(jaw_points), returnPoints=False)
     warp_jaw = warp_jaw.tolist()
-
     for i in range(0, len(warp_jaw)):
         warp_jaw[i] = warp_jaw[i][0]
 
     warp_jaw.sort()
-
     if len(warp_jaw) <= jaw:
         dst_list = dst_list[jaw - len(warp_jaw):]
         src_list = src_list[jaw - len(warp_jaw):]
@@ -103,7 +99,6 @@ def tran_src(src_img, src_points, dst_points, face_area=None):
                 warp_jaw.remove(2 * i)
 
             dst_list[i] = jaw_points[int(warp_jaw[i])]
-
     dt = core.measure_triangle(src_img, dst_list)
 
     res_img = np.zeros(src_img.shape, dtype=src_img.dtype)
